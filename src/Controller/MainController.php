@@ -2,29 +2,58 @@
 
 namespace App\Controller;
 
-use App\Block\FrontForm;
-use App\Entity\Authors;
-use App\Block\TopThreeAuthors;
+use App\Service\BinanceService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Messages;
-use Symfony\Component\HttpFoundation\Request;
 
 class MainController extends AbstractController
 {
-    #[Route('/', name: 'app_main',)]
-    public function index(Request $request, EntityManagerInterface $entityManager ,FrontForm $frontForm):Response
-    {
-        $authors = $entityManager->getRepository(Authors::class)->findAll();
-        $message = $frontForm->addArticle($request);
 
-        // Zwróć komunikat do szablonu Twig
-        return $this->render('main_api/index.html.twig', [
-            'message' => $message,
-            'authors' => $authors
-        ]);
-            
-        }
+    private $binanceService;
+
+    public function __construct(BinanceService $binanceService)
+    {
+        $this->binanceService = $binanceService;
     }
+
+    #[Route('/', name: 'top_volume_coins',)]
+    public function topVolumeCoins(): Response
+    {
+        $topVolumeCoins = $this->binanceService->getTopVolumeCoinsInUSDT();
+
+        return $this->render('index.html.twig', [
+            'coins' => $topVolumeCoins,
+        ]);
+    }
+
+    #[Route('/top-lowest-coins', name: 'top_lowest_coins',)]
+    public function topLowest(): Response
+    {
+        $topDecliningCoins = $this->binanceService->getTopDecliningCoins();
+
+        return $this->render('index.html.twig', [
+            'coins' => $topDecliningCoins,
+        ]);
+    }
+
+    #[Route('/top-raise-coins', name: 'top_raise_coins',)]
+    public function topRaise(): Response
+    {
+        $topDecliningCoins = $this->binanceService->getTopRaisingCoins();
+
+        return $this->render('index.html.twig', [
+            'coins' => $topDecliningCoins,
+        ]);
+    }
+
+    #[Route('/top-transactions-coins', name: 'top_transactions_coins',)]
+    public function topTransations(): Response
+    {
+        $topDecliningCoins = $this->binanceService->getTopTransactionCoins();
+
+        return $this->render('index.html.twig', [
+            'coins' => $topDecliningCoins,
+        ]);
+    }
+}

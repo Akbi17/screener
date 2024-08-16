@@ -1,0 +1,41 @@
+{# templates/market/top_declining_coins.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Krypto Wykresy{% endblock %}
+
+{% block body %}
+<div class="charts-grid">
+  {% for coin in coins %}
+    <div class="tradingview-widget-container" id="chart_{{ loop.index }}"></div>
+  {% endfor %}
+</div>
+
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+<script type="text/javascript">
+  const charts = [
+    {% for coin in coins %}
+      { container_id: "chart_{{ loop.index }}", symbol: "BINANCE:{{ coin.symbol }}" },
+    {% endfor %}
+  ];
+
+  charts.forEach(chart => {
+    new TradingView.widget({
+      "container_id": chart.container_id,
+      "symbol": chart.symbol,
+      "interval": "D",
+      "timezone": "Etc/UTC",
+      "theme": "light",
+      "style": "1",
+      "locale": "en",
+      "toolbar_bg": "#f1f3f6",
+      "enable_publishing": false,
+      "withdateranges": true,
+      "hide_side_toolbar": false,
+      "allow_symbol_change": true,
+      "height": "100%", // Dostosuj wysokość widgetu
+      "width": "100%",  // Dostosuj szerokość widgetu
+    });
+  });
+</script>
+{% endblock %}

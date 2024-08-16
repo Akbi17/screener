@@ -1,0 +1,77 @@
+
+/* style nagłówka */
+
+/* Resetowanie marginesów i paddingu */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+/* Stylizacja nagłówka */
+.header {
+  height: 30px;
+  width: 100%;
+  background-color: #f1f1f1; /* Kolor tła nagłówka */
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  border-bottom: 1px solid #ddd; /* Opcjonalna linia oddzielająca nagłówek od reszty treści */
+}
+
+/* Stylizacja nawigacji */
+.nav {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Stylizacja zakładek */
+.nav-tabs {
+  display: flex;
+  list-style-type: none;
+  gap: 20px; /* Odstęp między zakładkami */
+  margin-right: auto; /* Przesuwa zakładki do lewego końca nagłówka */
+}
+
+.nav-item a {
+  text-decoration: none;
+  color: #333; /* Kolor tekstu zakładek */
+  font-size: 14px; /* Rozmiar czcionki */
+  line-height: 30px; /* Wyrównanie tekstu w pionie */
+}
+
+/* Stylizacja ikony ustawień */
+.settings-icon {
+  margin-left: auto; /* Przesuwa ikonę do prawej strony */
+  font-size: 20px; /* Rozmiar ikony */
+  color: #333; /* Kolor ikony */
+}
+
+
+
+
+/* style grafów */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Ustawienie 3 kolumn */
+  grid-template-rows: repeat(3, 1fr); /* Ustawienie 3 wierszy */
+  gap: 0 5px; /* Odstęp między kolumnami, brak odstępu między wierszami */
+  grid-row-gap: 10px; /* Odstęp między wierszami */
+  width: 100vw;
+  height: 100vh !important;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.tradingview-widget-container {
+  width: 100%; /* Zajmuje pełną szerokość wiersza */
+  height: 100%; /* Zajmuje pełną wysokość wiersza */
+  box-sizing: border-box; /* Uwzględnienie marginesów i odstępów w wymiarach */
+}
