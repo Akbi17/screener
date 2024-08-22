@@ -26,7 +26,7 @@ class BinanceService
     private function filterUsdtPairs(array $data, array $availableSymbols = []): array
     {
         return array_filter($data, function ($coin) use ($availableSymbols) {
-            $isUsdtPair = strpos($coin['symbol'], 'USDT') !== false;
+            $isUsdtPair    = strpos($coin['symbol'], 'USDT') !== false;
             $isValidSymbol = empty($availableSymbols) || in_array($coin['symbol'], $availableSymbols);
             return $isUsdtPair && $isValidSymbol;
         });
@@ -34,8 +34,8 @@ class BinanceService
 
     public function getTopDecliningCoins(int $limit = 9): array
     {
-        $data = $this->fetchData(self::TICKER_24HR_URL);
-        $usdtPairs = $this->filterUsdtPairs($data);
+        $data       = $this->fetchData(self::TICKER_24HR_URL);
+        $usdtPairs  = $this->filterUsdtPairs($data);
 
         usort($usdtPairs, function ($a, $b) {
             return (float)$a['priceChangePercent'] <=> (float)$b['priceChangePercent'];
@@ -46,14 +46,13 @@ class BinanceService
 
     public function getTopVolumeCoinsInUSDT(int $limit = 9): array
     {
-        $data = $this->fetchData(self::TICKER_24HR_URL);
-        $usdtPairs = $this->filterUsdtPairs($data);
+        $data       = $this->fetchData(self::TICKER_24HR_URL);
+        $usdtPairs  = $this->filterUsdtPairs($data);
 
         foreach ($usdtPairs as &$coin) {
             $coin['volumeInUSDT'] = $coin['volume'] * $coin['lastPrice'];
         }
         unset($coin);
-
         usort($usdtPairs, function ($a, $b) {
             return $b['volumeInUSDT'] <=> $a['volumeInUSDT'];
         });
@@ -63,11 +62,10 @@ class BinanceService
 
     public function getTopRaisingCoins(int $limit = 9): array
     {
-        $exchangeInfo = $this->fetchData(self::EXCHANGE_INFO_URL);
-        $availableSymbols = array_column($exchangeInfo['symbols'], 'symbol');
-
-        $data = $this->fetchData(self::TICKER_24HR_URL);
-        $usdtPairs = $this->filterUsdtPairs($data, $availableSymbols);
+        $exchangeInfo       = $this->fetchData(self::EXCHANGE_INFO_URL);
+        $availableSymbols   = array_column($exchangeInfo['symbols'], 'symbol');
+        $data               = $this->fetchData(self::TICKER_24HR_URL);
+        $usdtPairs          = $this->filterUsdtPairs($data, $availableSymbols);
 
         usort($usdtPairs, function ($a, $b) {
             return (float)$b['priceChangePercent'] <=> (float)$a['priceChangePercent'];
@@ -78,8 +76,8 @@ class BinanceService
 
     public function getTopTransactionCoins(int $limit = 9): array
     {
-        $data = $this->fetchData(self::TICKER_24HR_URL);
-        $usdtPairs = $this->filterUsdtPairs($data);
+        $data       = $this->fetchData(self::TICKER_24HR_URL);
+        $usdtPairs  = $this->filterUsdtPairs($data);
 
         usort($usdtPairs, function ($a, $b) {
             return $b['count'] <=> $a['count'];
@@ -91,27 +89,27 @@ class BinanceService
     private function formatCoinData(array $coin): array
     {
         return [
-            'symbol' => $coin['symbol'],
+            'symbol'             => $coin['symbol'],
             'priceChangePercent' => $coin['priceChangePercent'],
-            'lastPrice' => $coin['lastPrice'],
+            'lastPrice'          => $coin['lastPrice'],
         ];
     }
 
     private function formatVolumeCoinData(array $coin): array
     {
         return [
-            'symbol' => $coin['symbol'],
-            'volume' => $coin['volume'],
-            'lastPrice' => $coin['lastPrice'],
-            'volumeInUSDT' => $coin['volumeInUSDT'],
+            'symbol'        => $coin['symbol'],
+            'volume'        => $coin['volume'],
+            'lastPrice'     => $coin['lastPrice'],
+            'volumeInUSDT'  => $coin['volumeInUSDT'],
         ];
     }
 
     private function formatTransactionCoinData(array $coin): array
     {
         return [
-            'symbol' => $coin['symbol'],
-            'count' => $coin['count'], // Liczba transakcji
+            'symbol'    => $coin['symbol'],
+            'count'     => $coin['count'], // Liczba transakcji
             'lastPrice' => $coin['lastPrice'],
         ];
     }
